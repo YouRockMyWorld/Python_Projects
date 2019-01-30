@@ -13,6 +13,7 @@ class MyWindow(QMainWindow, Ui_MainWindow):
         self.setupUi(self)
 
         self.__excel_path = ''
+        self.__excel_path_list = []
         self.__excel_out_path = ''
         self.__conf_path = ''
 
@@ -26,6 +27,8 @@ class MyWindow(QMainWindow, Ui_MainWindow):
         self.pushButton_converte.clicked.connect(self.pushButton_converte_Clicked)
         self.pushButton_conf.clicked.connect(self.pushButton_conf_Clicked)
         self.lineEdit_excel_out.editingFinished.connect(self.lineEdit_excel_out_editingFinished)
+        # self.radioButton_single.clicked.connect(self.radioButton_singleORmulti_Clicked)
+        # self.radioButton_multi.clicked.connect(self.radioButton_singleORmulti_Clicked)
         self.show()
 
 
@@ -41,11 +44,19 @@ class MyWindow(QMainWindow, Ui_MainWindow):
 
 
     def pushButton_excel_Clicked(self):
-        path = QFileDialog.getOpenFileName(self, '打开报表', '.', 'Excel files (*.xlsx)')
-        if path[0] != '':
-            self.lineEdit_excel.setText(str(path[0]))
-            self.__excel_path = path[0]
-            self.lineEdit_excel.setDisabled(True)
+        if self.radioButton_single.isChecked():
+            path = QFileDialog.getOpenFileName(self, '选择报表', '.', 'Excel files (*.xlsx)')
+            if path[0]:
+                self.lineEdit_excel.setText(str(path[0]))
+                self.__excel_path = path[0]
+                self.lineEdit_excel.setReadOnly(True)
+
+        if self.radioButton_multi.isChecked():
+            path = QFileDialog.getOpenFileNames(self, '选择报表', '.', 'Excel files (*.xlsx)')
+            if path[0]:
+                self.lineEdit_excel.setText(', '.join(path[0]))
+                self.__excel_path_list = path[0]
+                self.lineEdit_excel.setReadOnly(True)
 
 
     def pushButton_conf_Clicked(self):
@@ -62,6 +73,16 @@ class MyWindow(QMainWindow, Ui_MainWindow):
             self.lineEdit_excel_out.setText(path[0])
             self.__excel_out_path = path[0]
             # self.lineEdit_excel_out.setDisabled(True)
+
+
+    # def radioButton_singleORmulti_Clicked(self):
+    #     if self.radioButton_single.isChecked():
+    #         self.pushButton_excel_out.setDisabled(False)
+    #         self.pushButton_excel.clicked.connect(self.pushButton_excel_Clicked)
+    #
+    #     if self.radioButton_multi.isChecked():
+    #         self.pushButton_excel_out.setDisabled(True)
+    #         self.pushButton_excel.clicked.connect(self.clsss)
 
 
     # def pushButton_converte_Clicked(self):

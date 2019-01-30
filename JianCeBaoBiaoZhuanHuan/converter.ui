@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>469</width>
-    <height>409</height>
+    <height>513</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -25,7 +25,7 @@
      <widget class="QLabel" name="label_3">
       <property name="font">
        <font>
-        <pointsize>10</pointsize>
+        <pointsize>12</pointsize>
         <weight>50</weight>
         <bold>false</bold>
        </font>
@@ -37,6 +37,27 @@
        <set>Qt::AlignCenter</set>
       </property>
      </widget>
+    </item>
+    <item>
+     <layout class="QHBoxLayout" name="horizontalLayout_5">
+      <item alignment="Qt::AlignHCenter">
+       <widget class="QRadioButton" name="radioButton_single">
+        <property name="text">
+         <string>单一转换</string>
+        </property>
+        <property name="checked">
+         <bool>true</bool>
+        </property>
+       </widget>
+      </item>
+      <item alignment="Qt::AlignHCenter">
+       <widget class="QRadioButton" name="radioButton_multi">
+        <property name="text">
+         <string>批量转换</string>
+        </property>
+       </widget>
+      </item>
+     </layout>
     </item>
     <item>
      <layout class="QHBoxLayout" name="horizontalLayout">
