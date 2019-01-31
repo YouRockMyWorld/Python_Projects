@@ -27,8 +27,8 @@ class MyWindow(QMainWindow, Ui_MainWindow):
         self.pushButton_converte.clicked.connect(self.pushButton_converte_Clicked)
         self.pushButton_conf.clicked.connect(self.pushButton_conf_Clicked)
         self.lineEdit_excel_out.editingFinished.connect(self.lineEdit_excel_out_editingFinished)
-        # self.radioButton_single.clicked.connect(self.radioButton_singleORmulti_Clicked)
-        # self.radioButton_multi.clicked.connect(self.radioButton_singleORmulti_Clicked)
+        self.radioButton_single.clicked.connect(self.radioButton_singleORmulti_Clicked)
+        self.radioButton_multi.clicked.connect(self.radioButton_singleORmulti_Clicked)
         self.show()
 
 
@@ -75,14 +75,19 @@ class MyWindow(QMainWindow, Ui_MainWindow):
             # self.lineEdit_excel_out.setDisabled(True)
 
 
-    # def radioButton_singleORmulti_Clicked(self):
-    #     if self.radioButton_single.isChecked():
-    #         self.pushButton_excel_out.setDisabled(False)
-    #         self.pushButton_excel.clicked.connect(self.pushButton_excel_Clicked)
-    #
-    #     if self.radioButton_multi.isChecked():
-    #         self.pushButton_excel_out.setDisabled(True)
-    #         self.pushButton_excel.clicked.connect(self.clsss)
+    def radioButton_singleORmulti_Clicked(self):
+        if self.radioButton_single.isChecked():
+            self.pushButton_excel_out.setDisabled(False)
+            self.lineEdit_excel_out.setDisabled(False)
+            self.lineEdit_excel.clear()
+            self.__excel_path_list.clear()
+
+        if self.radioButton_multi.isChecked():
+            self.pushButton_excel_out.setDisabled(True)
+            self.lineEdit_excel_out.clear()
+            self.lineEdit_excel_out.setDisabled(True)
+            self.lineEdit_excel.clear()
+            self.__excel_path = ''
 
 
     # def pushButton_converte_Clicked(self):
@@ -108,24 +113,44 @@ class MyWindow(QMainWindow, Ui_MainWindow):
 
     def pushButton_converte_Clicked(self):
         try:
-            if self.__excel_path and self.__excel_out_path and self.__conf_path:
-                with open(self.__conf_path, encoding='utf-8') as f:
-                    jsonstr = f.read()
-                dataconf = json.loads(jsonstr)
+            if self.radioButton_single.isChecked():
+                if self.__excel_path and self.__excel_out_path and self.__conf_path:
+                    with open(self.__conf_path, encoding='utf-8') as f:
+                        jsonstr = f.read()
+                    dataconf = json.loads(jsonstr)
 
-                self.thread = MyThread.ExcelThread()
-                self.thread.signalOut.connect(self.setInfoText)
-                self.thread.started.connect(self.convert_start)
-                self.thread.finished.connect(self.convert_finished)
+                    self.thread = MyThread.ExcelThread()
+                    self.thread.signalOut.connect(self.setInfoText)
+                    self.thread.started.connect(self.convert_start)
+                    self.thread.finished.connect(self.convert_finished)
 
-                self.thread.readPath = self.__excel_path
-                self.thread.writePath = self.__excel_out_path
-                self.thread.conf = dataconf
+                    self.thread.readPath = self.__excel_path
+                    self.thread.writePath = self.__excel_out_path
+                    self.thread.conf = dataconf
 
-                self.thread.start()
+                    self.thread.start()
 
-            else:
-                QMessageBox.warning(self, '警告', '未能正确配置！', QMessageBox.Ok)
+                else:
+                    QMessageBox.warning(self, '警告', '未能正确配置！', QMessageBox.Ok)
+
+            elif self.radioButton_multi.isChecked():
+                if self.__excel_path_list and self.__conf_path:
+                    with open(self.__conf_path, encoding='utf-8') as f:
+                        jsonstr = f.read()
+                    dataconf = json.loads(jsonstr)
+
+                    self.thread = MyThread.MultiExcelThread()
+                    self.thread.signalOut.connect(self.setInfoText)
+                    self.thread.started.connect(self.convert_start)
+                    self.thread.finished.connect(self.convert_finished)
+
+                    self.thread.readPath_list = self.__excel_path_list
+                    self.thread.conf = dataconf
+
+                    self.thread.start()
+
+                else:
+                    QMessageBox.warning(self, '警告', '未能正确配置！', QMessageBox.Ok)
 
         except Exception as e:
             self.textBrowser_out.insertPlainText(str(e))

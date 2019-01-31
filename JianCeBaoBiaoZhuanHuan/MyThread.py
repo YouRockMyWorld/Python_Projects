@@ -16,11 +16,12 @@ class ExcelThread(QtCore.QThread):
     def run(self):
         try:
             if self.writePath[-1] == 'x':
-                self.__ProcessXlsx()
+                self.ProcessXlsx(self.readPath, self.writePath)
             elif self.writePath[-1] == 's':
-                self.__ProcessXls()
+                self.ProcessXls(self.readPath, self.writePath)
         except Exception as e:
             self.signalOut.emit(str(e))
+
 
 
     # 将数据墙顶水平位移数据除以1000，不需要的话使用注释中的 ToUpper 函数，同时记得将两个调用改掉
@@ -48,9 +49,9 @@ class ExcelThread(QtCore.QThread):
     #         return s
 
 
-    def __ProcessXls(self):
+    def ProcessXls(self, read_path, write_path):
         out_info = ''
-        read_excel_book = xlrd.open_workbook(self.readPath)
+        read_excel_book = xlrd.open_workbook(read_path)
         write_excel_book = xlwt.Workbook()
         # write_excel_book = xlsxwriter.Workbook(write_excel_book_path)
         x = 1
@@ -121,14 +122,14 @@ class ExcelThread(QtCore.QThread):
 
         out_info += '*' * 100 + '\n'
         self.signalOut.emit('*' * 100 + '\n')
-        write_excel_book.save(self.writePath)
+        write_excel_book.save(write_path)
         return out_info
 
 
-    def __ProcessXlsx(self):
+    def ProcessXlsx(self, read_path, write_path):
         out_info = ''
-        read_excel_book = xlrd.open_workbook(self.readPath)
-        write_excel_book = xlsxwriter.Workbook(self.writePath)
+        read_excel_book = xlrd.open_workbook(read_path)
+        write_excel_book = xlsxwriter.Workbook(write_path)
         x = 1
         for sheetconf in self.conf:
             try:
@@ -194,3 +195,21 @@ class ExcelThread(QtCore.QThread):
         self.signalOut.emit('*' * 100 + '\n')
         write_excel_book.close()
         return out_info
+
+
+class MultiExcelThread(ExcelThread):
+    def __init__(self):
+        super(MultiExcelThread, self).__init__()
+        self.readPath_list = []
+
+    def run(self):
+        try:
+            for readpath in self.readPath_list:
+                if readpath[-1] == 'x':
+                    writepath = readpath.replace('.xlsx', '_转换.xlsx')
+                    self.ProcessXlsx(readpath, writepath)
+                elif readpath[-1] == 's':
+                    writepath = readpath.replace('.xls', '_转换.xls')
+                    self.ProcessXls(readpath, writepath)
+        except Exception as e:
+            self.signalOut.emit(str(e))

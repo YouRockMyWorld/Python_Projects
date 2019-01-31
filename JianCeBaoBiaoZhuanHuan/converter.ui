@@ -39,6 +39,13 @@
      </widget>
     </item>
     <item>
+     <widget class="Line" name="line_3">
+      <property name="orientation">
+       <enum>Qt::Horizontal</enum>
+      </property>
+     </widget>
+    </item>
+    <item>
      <layout class="QHBoxLayout" name="horizontalLayout_5">
       <item alignment="Qt::AlignHCenter">
        <widget class="QRadioButton" name="radioButton_single">
