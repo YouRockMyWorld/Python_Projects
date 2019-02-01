@@ -35,23 +35,24 @@ class ExcelThread(QtCore.QThread):
 
 
     # 将地表沉降点号去掉“D”只留“B1-2”，不需要的话使用注释中的 ToUpper 函数，同时记得将两个调用改掉
-    def ToUpper(self, s, sheet_name):
-        if s and str(s)[0].isalpha() and sheet_name == '地表沉降':
-            return s.upper()[1:]
-        else:
-            return s
-
-    # 原始ToUpper函数，只将所有点号字母改为大写
-    # def ToUpper(self, s):
-    #     if s and str(s)[0].isalpha():
-    #         return s.upper()
+    # def ToUpper(self, s, sheet_name):
+    #     if s and str(s)[0].isalpha() and sheet_name == '地表沉降':
+    #         return s.upper()[1:]
     #     else:
     #         return s
+
+    # 原始ToUpper函数，只将所有点号字母改为大写
+    def ToUpper(self, s):
+        if s and str(s)[0].isalpha():
+            return s.upper()
+        else:
+            return s
 
 
     def ProcessXls(self, read_path, write_path):
         out_info = ''
         read_excel_book = xlrd.open_workbook(read_path)
+        sheet_list = read_excel_book.sheet_names()
         write_excel_book = xlwt.Workbook()
         # write_excel_book = xlsxwriter.Workbook(write_excel_book_path)
         x = 1
@@ -65,6 +66,8 @@ class ExcelThread(QtCore.QThread):
                 added_header_name = []
                 valuelist = []
                 for item in sheetconf['Read']:
+                    if item['ReadSheetName'] not in sheet_list:
+                        continue
                     read_sheet = read_excel_book.sheet_by_name(item['ReadSheetName'])
                     for dataitem in item['Data']:
                         value = []
@@ -86,8 +89,8 @@ class ExcelThread(QtCore.QThread):
                     for i in valuelist:
                         if list(i.keys())[0] == item:
                             l.extend(list(i.values())[0])
-                    finallist.append(list(map(lambda s: self.ToUpper(s, sheetconf['WriteSheetName']), l)))
-                    # finallist.append(list(map(lambda s: self.ToUpper(s), l)))
+                    # finallist.append(list(map(lambda s: self.ToUpper(s, sheetconf['WriteSheetName']), l)))
+                    finallist.append(list(map(lambda s: self.ToUpper(s), l)))
 
 
                 for item in header:
@@ -117,7 +120,8 @@ class ExcelThread(QtCore.QThread):
                 x += 1
                 time.sleep(0.1)
 
-            except:
+            except Exception as e:
+                print(str(e) + '\n')
                 continue
 
         out_info += '*' * 100 + '\n'
@@ -129,6 +133,7 @@ class ExcelThread(QtCore.QThread):
     def ProcessXlsx(self, read_path, write_path):
         out_info = ''
         read_excel_book = xlrd.open_workbook(read_path)
+        sheet_list = read_excel_book.sheet_names()
         write_excel_book = xlsxwriter.Workbook(write_path)
         x = 1
         for sheetconf in self.conf:
@@ -140,6 +145,8 @@ class ExcelThread(QtCore.QThread):
                 added_header_name = []
                 valuelist = []
                 for item in sheetconf['Read']:
+                    if item['ReadSheetName'] not in sheet_list:
+                        continue
                     read_sheet = read_excel_book.sheet_by_name(item['ReadSheetName'])
                     for dataitem in item['Data']:
                         value = []
@@ -161,8 +168,8 @@ class ExcelThread(QtCore.QThread):
                     for i in valuelist:
                         if list(i.keys())[0] == item:
                             l.extend(list(i.values())[0])
-                    finallist.append(list(map(lambda s: self.ToUpper(s, sheetconf['WriteSheetName']), l)))
-                    # finallist.append(list(map(lambda s: self.ToUpper(s), l)))
+                    # finallist.append(list(map(lambda s: self.ToUpper(s, sheetconf['WriteSheetName']), l)))
+                    finallist.append(list(map(lambda s: self.ToUpper(s), l)))
 
 
                 for item in header:
@@ -188,7 +195,8 @@ class ExcelThread(QtCore.QThread):
                 x += 1
                 time.sleep(0.1)
 
-            except:
+            except Exception as e:
+                print(str(e) + '\n')
                 continue
 
         out_info += '*' * 100 + '\n'
