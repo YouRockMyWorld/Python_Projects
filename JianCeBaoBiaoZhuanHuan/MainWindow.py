@@ -1,6 +1,6 @@
 from PyQt5.QtWidgets import QApplication, QMainWindow, QFileDialog, QMessageBox
 from PyQt5.QtGui import QTextCursor
-import sys, os
+import sys, os, time
 from converter import *
 import json
 import MyThread
@@ -16,6 +16,7 @@ class MyWindow(QMainWindow, Ui_MainWindow):
         self.__excel_path_list = []
         self.__excel_out_path = ''
         self.__conf_path = ''
+        self.__logfile = None
 
         self.initUI()
         self.initConf()
@@ -164,16 +165,28 @@ class MyWindow(QMainWindow, Ui_MainWindow):
         textCursor.movePosition(QTextCursor.End)
         self.textBrowser_out.setTextCursor(textCursor)
 
+        #logfile
+        self.__logfile.write(text)
+
 
     def convert_start(self):
         self.label_out_info.setText('开始转换...')
         self.pushButton_converte.setDisabled(True)
+
+        # 将读取到的数据信息输出到logfile，和signalOut输出一样，一次写一行
+        name = time.strftime('%Y-%m-%d_%H-%M-%S') + '.log'
+        self.__logfile = open(name, 'w', encoding='utf-8')
 
 
     def convert_finished(self):
         self.label_out_info.setText('转换完成！')
         self.pushButton_converte.setDisabled(False)
 
+        #logfile
+        try:
+            self.__logfile.close()
+        except Exception as e:
+            print(e)
 
     def lineEdit_excel_out_editingFinished(self):
         path = self.lineEdit_excel_out.text()

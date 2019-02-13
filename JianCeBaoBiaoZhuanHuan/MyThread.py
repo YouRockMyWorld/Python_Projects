@@ -56,6 +56,8 @@ class ExcelThread(QtCore.QThread):
         write_excel_book = xlwt.Workbook()
         # write_excel_book = xlsxwriter.Workbook(write_excel_book_path)
         x = 1
+        print('正在将："' + read_path + '" 写入 "' + write_path + '"')
+        self.signalOut.emit('正在将："' + read_path + '" 写入 "' + write_path + '"\n')
         for sheetconf in self.conf:
             try:
                 print('第 %d 个sheet，名字为：%s' % (x, sheetconf['WriteSheetName']))
@@ -136,6 +138,8 @@ class ExcelThread(QtCore.QThread):
         sheet_list = read_excel_book.sheet_names()
         write_excel_book = xlsxwriter.Workbook(write_path)
         x = 1
+        print('正在将："' + read_path + '" 写入 "' + write_path + '"')
+        self.signalOut.emit('正在将："' + read_path + '" 写入 "' + write_path + '"\n')
         for sheetconf in self.conf:
             try:
                 print('第 %d 个sheet，名字为：%s' % (x, sheetconf['WriteSheetName']))
