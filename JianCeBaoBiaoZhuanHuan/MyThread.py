@@ -49,6 +49,18 @@ class ExcelThread(QtCore.QThread):
             return s
 
 
+    def delete_null_value_in_list(self, l):
+        ss = set(map(lambda x: '' in x, l))
+        if len(ss) == 1 and ss.pop() == True:
+            min_len = min(list(map(len, l)))
+            for i in range(min_len - 1, -1 , -1):
+                s = set(map(lambda x: x[i], l))
+                if len(s) == 1 and s.pop() == '':
+                    for li in l:
+                        li.pop(i)
+
+
+
     def ProcessXls(self, read_path, write_path):
         out_info = ''
         read_excel_book = xlrd.open_workbook(read_path)
@@ -94,6 +106,8 @@ class ExcelThread(QtCore.QThread):
                     # finallist.append(list(map(lambda s: self.ToUpper(s, sheetconf['WriteSheetName']), l)))
                     finallist.append(list(map(lambda s: self.ToUpper(s), l)))
 
+                # 验证是否存在有空值,若有则删除
+                self.delete_null_value_in_list(finallist)
 
                 for item in header:
                     write_sheet.write(0, header.index(item), item)
@@ -175,6 +189,8 @@ class ExcelThread(QtCore.QThread):
                     # finallist.append(list(map(lambda s: self.ToUpper(s, sheetconf['WriteSheetName']), l)))
                     finallist.append(list(map(lambda s: self.ToUpper(s), l)))
 
+                # 验证是否存在有空值,若有则删除
+                self.delete_null_value_in_list(finallist)
 
                 for item in header:
                     write_sheet.write(0, header.index(item), item)
