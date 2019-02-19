@@ -11,12 +11,13 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
-        MainWindow.resize(469, 513)
+        MainWindow.resize(469, 550)
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Preferred)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
         sizePolicy.setHeightForWidth(MainWindow.sizePolicy().hasHeightForWidth())
         MainWindow.setSizePolicy(sizePolicy)
+        MainWindow.setMinimumSize(QtCore.QSize(450, 550))
         self.centralwidget = QtWidgets.QWidget(MainWindow)
         self.centralwidget.setObjectName("centralwidget")
         self.verticalLayout = QtWidgets.QVBoxLayout(self.centralwidget)
@@ -126,7 +127,7 @@ class Ui_MainWindow(object):
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
         MainWindow.setWindowTitle(_translate("MainWindow", "报表转换器"))
-        self.label_3.setText(_translate("MainWindow", "报表转化"))
+        self.label_3.setText(_translate("MainWindow", "<html><head/><body><p>报表转化</p><p>--- design by liu sc</p></body></html>"))
         self.radioButton_single.setText(_translate("MainWindow", "单一转换"))
         self.radioButton_multi.setText(_translate("MainWindow", "批量转换"))
         self.label.setText(_translate("MainWindow", "报表路径："))
