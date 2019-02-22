@@ -128,7 +128,9 @@ class Ui_MainWindow(object):
         _translate = QtCore.QCoreApplication.translate
         MainWindow.setWindowTitle(_translate("MainWindow", "报表转换器"))
         self.label_3.setText(_translate("MainWindow", "<html><head/><body><p>报表转化</p><p>--- design by liu sc</p></body></html>"))
+        self.radioButton_single.setToolTip(_translate("MainWindow", "<html><head/><body><p><span style=\" font-weight:600;\">功能：</span></p><p>将选中报表进行转换</p><p><span style=\" font-weight:600;\">注意：</span></p><p>可在输出路径中指定转换后格式（xls或者xlsx）</p></body></html>"))
         self.radioButton_single.setText(_translate("MainWindow", "单一转换"))
+        self.radioButton_multi.setToolTip(_translate("MainWindow", "<html><head/><body><p><span style=\" font-weight:600;\">功能：</span></p><p>将选中的报表批量进行转换</p><p><span style=\" font-weight:600;\">注意：</span></p><p>输出路径为选中报表所在文件夹</p></body></html>"))
         self.radioButton_multi.setText(_translate("MainWindow", "批量转换"))
         self.label.setText(_translate("MainWindow", "报表路径："))
         self.pushButton_excel.setText(_translate("MainWindow", "选择"))

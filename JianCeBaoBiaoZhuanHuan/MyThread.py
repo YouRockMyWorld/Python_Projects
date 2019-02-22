@@ -80,9 +80,13 @@ class ExcelThread(QtCore.QThread):
                 added_header_name = []
                 valuelist = []
                 for item in sheetconf['Read']:
+                    #验证表是否存在
                     if item['ReadSheetName'] not in sheet_list:
                         continue
                     read_sheet = read_excel_book.sheet_by_name(item['ReadSheetName'])
+                    #验证表是否隐藏
+                    if read_sheet.visibility == 1:
+                        continue
                     for dataitem in item['Data']:
                         value = []
                         # valuelist.append({dataitem['WriteHeaderName']:[]})
@@ -163,9 +167,13 @@ class ExcelThread(QtCore.QThread):
                 added_header_name = []
                 valuelist = []
                 for item in sheetconf['Read']:
+                    #验证表是否存在
                     if item['ReadSheetName'] not in sheet_list:
                         continue
                     read_sheet = read_excel_book.sheet_by_name(item['ReadSheetName'])
+                    #验证表是否隐藏
+                    if read_sheet.visibility == 1:
+                        continue
                     for dataitem in item['Data']:
                         value = []
                         # valuelist.append({dataitem['WriteHeaderName']:[]})

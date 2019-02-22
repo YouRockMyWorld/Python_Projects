@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>469</width>
-    <height>513</height>
+    <height>550</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -15,6 +15,12 @@
     <horstretch>0</horstretch>
     <verstretch>0</verstretch>
    </sizepolicy>
+  </property>
+  <property name="minimumSize">
+   <size>
+    <width>450</width>
+    <height>550</height>
+   </size>
   </property>
   <property name="windowTitle">
    <string>报表转换器</string>
@@ -31,7 +37,7 @@
        </font>
       </property>
       <property name="text">
-       <string>报表转化</string>
+       <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;报表转化&lt;/p&gt;&lt;p&gt;--- design by liu sc&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
       </property>
       <property name="alignment">
        <set>Qt::AlignCenter</set>
@@ -49,6 +55,9 @@
      <layout class="QHBoxLayout" name="horizontalLayout_5">
       <item alignment="Qt::AlignHCenter">
        <widget class="QRadioButton" name="radioButton_single">
+        <property name="toolTip">
+         <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;功能：&lt;/span&gt;&lt;/p&gt;&lt;p&gt;将选中报表进行转换&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;注意：&lt;/span&gt;&lt;/p&gt;&lt;p&gt;可在输出路径中指定转换后格式（xls或者xlsx）&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+        </property>
         <property name="text">
          <string>单一转换</string>
         </property>
@@ -59,6 +68,9 @@
       </item>
       <item alignment="Qt::AlignHCenter">
        <widget class="QRadioButton" name="radioButton_multi">
+        <property name="toolTip">
+         <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;功能：&lt;/span&gt;&lt;/p&gt;&lt;p&gt;将选中的报表批量进行转换&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;注意：&lt;/span&gt;&lt;/p&gt;&lt;p&gt;输出路径为选中报表所在文件夹&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+        </property>
         <property name="text">
          <string>批量转换</string>
         </property>
