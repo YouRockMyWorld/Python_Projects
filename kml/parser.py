@@ -1,7 +1,8 @@
 import xml.etree.cElementTree as ET
-import glob,os
+import glob, os
 import xml.dom.minidom as MN
 from CONF import *
+
 
 
 def get_all_files(dir_path, ext = '*.*'):
@@ -11,10 +12,7 @@ def get_all_files(dir_path, ext = '*.*'):
     :param ext: 过滤文件名, 如'*.txt'
     :return: 文件完整路径列表
     '''
-    if dir_path.endswith('\\'):
-        filter_ext = dir_path +ext
-    else:
-        filter_ext = dir_path + '\\' +ext
+    filter_ext = os.path.join(dir_path, ext)
     filepaths = []
     for filename in glob.glob(filter_ext):
         filepaths.append(filename)
@@ -22,25 +20,16 @@ def get_all_files(dir_path, ext = '*.*'):
 
 
 def test():
-    tree = ET.parse(r'C:\Users\Administrator\Desktop\KML\二line地图数据(KML标准格式).kml')
+    tree = ET.parse(r'C:\Users\Administrator\Desktop\KML\*****.kml')
     placemark = tree.findall('Document/Placemark')
     print(len(placemark))
     for item in placemark:
         name = item.find('name').text.strip()
         coor = item.find('Point/coordinates').text.strip()
-        path = r'C:\Users\Administrator\Desktop\KML\站点\%s.txt' % (name)
+        path = r'C:\Users\Administrator\Desktop\***\%s.txt' % (name)
         with open(path, 'w') as f:
             s = coor.replace(' ', '\n')
             f.write(s)
-
-
-def NT_1_haoxian():
-    tree = ET.parse(r'C:\Users\Administrator\Desktop\KML\ 1line线路（标车站）.kml')
-    name = tree.findall('Document/Placemark/LineString/coordinates')
-    print(len(name))
-    with open(r'C:\Users\Administrator\Desktop\KML\1haoxian.txt', 'w') as f:
-        for n in name:
-            f.write(n.text.strip().replace('          ', '') + '\n')
 
 
 def get_kml_coordinates(path,xpath_filter):
@@ -52,20 +41,20 @@ def get_kml_coordinates(path,xpath_filter):
     return coordinates.text.strip()
 
 
-def create_kml():
+def create_kml(dir_path):
     root = ET.Element('kml')
     Document = ET.SubElement(root, 'Document')
     name = ET.SubElement(Document, 'name')
-    name.text = '一line地图数据'
+    name.text = '******地图数据'
     open_ = ET.SubElement(Document, 'open')
     open_.text = '1'
 
-    #单位工程范围
+    #单位工程范围****************************************************************************************
     print('开始输出单位工程范围信息...')
     Folder_danweigongchengfanwei = ET.SubElement(Document, 'Folder')
     name = ET.SubElement(Folder_danweigongchengfanwei, 'name')
     name.text = '单位工程范围'
-    files_danweigongcheng = get_all_files(r'C:\Users\Administrator\Desktop\KML\1line整理\单位工程范围', '*.kml')
+    files_danweigongcheng = get_all_files(os.path.join(dir_path,'单位工程范围'), '*.kml')
     for f in files_danweigongcheng:
         station_name = os.path.splitext(os.path.basename(f))[0]
         data = get_kml_coordinates(f,'Document/Folder/Placemark/Polygon/outerBoundaryIs/LinearRing/coordinates')
@@ -89,55 +78,83 @@ def create_kml():
         width = ET.SubElement(TrackStyle, 'width')
         width.text = '1'
 
-    #线路
+    #线路****************************************************************************************
     print('开始输出线路信息...')
     Folder_xianlu = ET.SubElement(Document, 'Folder')
     name = ET.SubElement(Folder_xianlu, 'name')
-    name.text = '线路'
+    name.text = '****线路'
     open_ = ET.SubElement(Folder_xianlu, 'open')
     open_.text = '1'
-    files_xianlu = get_all_files(r'C:\Users\Administrator\Desktop\KML\整理', '*.kml')
-    for f in files_xianlu:
-        line_name = os.path.splitext(os.path.basename(f))[0]
-        data = get_kml_coordinates(f, 'Document/Folder/Placemark/LineString/coordinates')
 
-        Placemark = ET.SubElement(Folder_xianlu, 'Placemark')
-        name = ET.SubElement(Placemark, 'name')
-        name.text = line_name
-        Style = ET.SubElement(Placemark, 'Style')
-        LineStyle = ET.SubElement(Style, 'LineStyle')
-        color = ET.SubElement(LineStyle, 'color')
-        color.text = 'ffd18802'
-        width = ET.SubElement(LineStyle, 'width')
-        width.text = '1'
-        MultiGeometry = ET.SubElement(Placemark, 'MultiGeometry')
+    files_xianlu_shangxing = get_all_files(os.path.join(dir_path,'****线路','上行'), '*.kml')
+
+    Placemark = ET.SubElement(Folder_xianlu, 'Placemark')
+    name = ET.SubElement(Placemark, 'name')
+    name.text = '上行'
+    Style = ET.SubElement(Placemark, 'Style')
+    LineStyle = ET.SubElement(Style, 'LineStyle')
+    color = ET.SubElement(LineStyle, 'color')
+    color.text = 'ffd18802'
+    width = ET.SubElement(LineStyle, 'width')
+    width.text = '1'
+    MultiGeometry = ET.SubElement(Placemark, 'MultiGeometry')
+
+    for f in files_xianlu_shangxing:
+        #line_name = os.path.splitext(os.path.basename(f))[0]
+        data = get_kml_coordinates(f, 'Document/Folder/Placemark/LineString/coordinates')
         LineString = ET.SubElement(MultiGeometry, 'LineString')
         coordinates = ET.SubElement(LineString, 'coordinates')
-        coordinates.text = '\n\t\t\t\t\t' + data.replace('\n','\n\t\t\t\t\t') + '\n\t\t\t\t\t'
-        OvStyle = ET.SubElement(Placemark, 'OvStyle')
-        TrackStyle = ET.SubElement(OvStyle, 'TrackStyle')
-        type = ET.SubElement(TrackStyle, 'type')
-        type.text = '5'
-        width = ET.SubElement(TrackStyle, 'width')
-        width.text = '1'
+        coordinates.text = '\n\t\t\t\t\t\t' + data.replace('\n','\n\t\t\t\t\t\t') + '\n\t\t\t\t\t\t'
+    OvStyle = ET.SubElement(Placemark, 'OvStyle')
+    TrackStyle = ET.SubElement(OvStyle, 'TrackStyle')
+    type = ET.SubElement(TrackStyle, 'type')
+    type.text = '5'
+    width = ET.SubElement(TrackStyle, 'width')
+    width.text = '1'
 
 
-    #单位工程位置
+    files_xianlu_xiaxing = get_all_files(os.path.join(dir_path, '****线路', '下行'), '*.kml')
+    Placemark = ET.SubElement(Folder_xianlu, 'Placemark')
+    name = ET.SubElement(Placemark, 'name')
+    name.text = '下行'
+    Style = ET.SubElement(Placemark, 'Style')
+    LineStyle = ET.SubElement(Style, 'LineStyle')
+    color = ET.SubElement(LineStyle, 'color')
+    color.text = 'ffd18802'
+    width = ET.SubElement(LineStyle, 'width')
+    width.text = '1'
+    MultiGeometry = ET.SubElement(Placemark, 'MultiGeometry')
+
+    for f in files_xianlu_xiaxing:
+        #line_name = os.path.splitext(os.path.basename(f))[0]
+        data = get_kml_coordinates(f, 'Document/Folder/Placemark/LineString/coordinates')
+        LineString = ET.SubElement(MultiGeometry, 'LineString')
+        coordinates = ET.SubElement(LineString, 'coordinates')
+        coordinates.text = '\n\t\t\t\t\t\t' + data.replace('\n', '\n\t\t\t\t\t\t') + '\n\t\t\t\t\t\t'
+    OvStyle = ET.SubElement(Placemark, 'OvStyle')
+    TrackStyle = ET.SubElement(OvStyle, 'TrackStyle')
+    type = ET.SubElement(TrackStyle, 'type')
+    type.text = '5'
+    width = ET.SubElement(TrackStyle, 'width')
+    width.text = '1'
+
+
+    #单位工程位置****************************************************************************************
     print('开始输出单位工程位置信息...')
     Folder_danweigongcheng = ET.SubElement(Document, 'Folder')
     name = ET.SubElement(Folder_danweigongcheng, 'name')
     name.text = '单位工程'
-    file = r'C:\Users\Administrator\Desktop\KML\整理\单位工程\车站经纬度.kml'
+    file = os.path.join(dir_path, '单位工程','**经纬度.kml')
     data = get_kml_coordinates(file, 'Document/Folder/Placemark/LineString/coordinates')
 
     datalist = data.split('\n')
 
-    if(len(datalist) == len(STATIONLIST)):
-        print('车站数量：'+ str(len(datalist)))
+    if(len(datalist) == len(*******LIST)):
+        print('**数量：'+ str(len(datalist)))
         for i in range(len(datalist)):
             Placemark = ET.SubElement(Folder_danweigongcheng, 'Placemark')
             name = ET.SubElement(Placemark, 'name')
-            name.text = STATIONLIST[i]
+            name.text = *******LIST[i]
             Style = ET.SubElement(Placemark, 'Style')
             IconStyle = ET.SubElement(Style, 'IconStyle')
             color = ET.SubElement(IconStyle, 'color')
@@ -154,10 +171,10 @@ def create_kml():
 
     rawText = ET.tostring(root)
     dom = MN.parseString(rawText)
-    with open(r'C:\Users\Administrator\Desktop\KML\result.kml', 'w', encoding='utf-8') as f:
+    with open(os.path.join(dir_path,'testout.kml'), 'w', encoding='utf-8') as f:
         dom.writexml(f, '', '\t', '\n', encoding='utf-8')
 
 
 
 if __name__ == '__main__':
-    create_kml()
+    create_kml(r'C:\Users\Administrator\Desktop\****\原始数据')
