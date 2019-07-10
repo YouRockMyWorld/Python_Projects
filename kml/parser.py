@@ -88,109 +88,36 @@ def create_kml(dir_path):
     open_ = ET.SubElement(Folder_xianlu, 'open')
     open_.text = '1'
 
-    
-    files_xianlu_shangxing = get_all_files(os.path.join(dir_path,'****线路','上行'), '*.kml')
-    Placemark = ET.SubElement(Folder_xianlu, 'Placemark')
-    name = ET.SubElement(Placemark, 'name')
-    name.text = '上行'
-    Style = ET.SubElement(Placemark, 'Style')
-    LineStyle = ET.SubElement(Style, 'LineStyle')
-    color = ET.SubElement(LineStyle, 'color')
-    color.text = 'ffd18802'
-    width = ET.SubElement(LineStyle, 'width')
-    width.text = '1'
-    MultiGeometry = ET.SubElement(Placemark, 'MultiGeometry')
+    #线路
+    xianlu_dir = os.path.join(dir_path, '******线路')
+    for child_name in os.listdir(xianlu_dir):
+        child_path = os.path.join(xianlu_dir, child_name)
+        if(os.path.isdir(child_path)):
 
-    for f in files_xianlu_shangxing:
-        #line_name = os.path.splitext(os.path.basename(f))[0]
-        data = get_kml_coordinates(f, 'Document/Folder/Placemark/LineString/coordinates')
-        LineString = ET.SubElement(MultiGeometry, 'LineString')
-        coordinates = ET.SubElement(LineString, 'coordinates')
-        coordinates.text = '\n\t\t\t\t\t\t' + data.replace('\n','\n\t\t\t\t\t\t') + '\n\t\t\t\t\t\t'
-    OvStyle = ET.SubElement(Placemark, 'OvStyle')
-    TrackStyle = ET.SubElement(OvStyle, 'TrackStyle')
-    type = ET.SubElement(TrackStyle, 'type')
-    type.text = '5'
-    width = ET.SubElement(TrackStyle, 'width')
-    width.text = '1'
+            files_xianlu = get_all_files(child_path, '*.kml')
+            Placemark = ET.SubElement(Folder_xianlu, 'Placemark')
+            name = ET.SubElement(Placemark, 'name')
+            name.text = child_name
+            Style = ET.SubElement(Placemark, 'Style')
+            LineStyle = ET.SubElement(Style, 'LineStyle')
+            color = ET.SubElement(LineStyle, 'color')
+            color.text = 'ffd18802'
+            width = ET.SubElement(LineStyle, 'width')
+            width.text = '1'
+            MultiGeometry = ET.SubElement(Placemark, 'MultiGeometry')
 
-    
-    files_xianlu_xiaxing = get_all_files(os.path.join(dir_path, '****线路', '下行'), '*.kml')
-    Placemark = ET.SubElement(Folder_xianlu, 'Placemark')
-    name = ET.SubElement(Placemark, 'name')
-    name.text = '下行'
-    Style = ET.SubElement(Placemark, 'Style')
-    LineStyle = ET.SubElement(Style, 'LineStyle')
-    color = ET.SubElement(LineStyle, 'color')
-    color.text = 'ffd18802'
-    width = ET.SubElement(LineStyle, 'width')
-    width.text = '1'
-    MultiGeometry = ET.SubElement(Placemark, 'MultiGeometry')
-
-    for f in files_xianlu_xiaxing:
-        #line_name = os.path.splitext(os.path.basename(f))[0]
-        data = get_kml_coordinates(f, 'Document/Folder/Placemark/LineString/coordinates')
-        LineString = ET.SubElement(MultiGeometry, 'LineString')
-        coordinates = ET.SubElement(LineString, 'coordinates')
-        coordinates.text = '\n\t\t\t\t\t\t' + data.replace('\n', '\n\t\t\t\t\t\t') + '\n\t\t\t\t\t\t'
-    OvStyle = ET.SubElement(Placemark, 'OvStyle')
-    TrackStyle = ET.SubElement(OvStyle, 'TrackStyle')
-    type = ET.SubElement(TrackStyle, 'type')
-    type.text = '5'
-    width = ET.SubElement(TrackStyle, 'width')
-    width.text = '1'
-
-    
-    files_tingchechang_shangxing = get_all_files(os.path.join(dir_path, '****线路', '***上行'), '*.kml')
-    Placemark = ET.SubElement(Folder_xianlu, 'Placemark')
-    name = ET.SubElement(Placemark, 'name')
-    name.text = '***上行'
-    Style = ET.SubElement(Placemark, 'Style')
-    LineStyle = ET.SubElement(Style, 'LineStyle')
-    color = ET.SubElement(LineStyle, 'color')
-    color.text = 'ffd18802'
-    width = ET.SubElement(LineStyle, 'width')
-    width.text = '1'
-    MultiGeometry = ET.SubElement(Placemark, 'MultiGeometry')
-
-    for f in files_tingchechang_shangxing:
-        # line_name = os.path.splitext(os.path.basename(f))[0]
-        data = get_kml_coordinates(f, 'Document/Folder/Placemark/LineString/coordinates')
-        LineString = ET.SubElement(MultiGeometry, 'LineString')
-        coordinates = ET.SubElement(LineString, 'coordinates')
-        coordinates.text = '\n\t\t\t\t\t\t' + data.replace('\n', '\n\t\t\t\t\t\t') + '\n\t\t\t\t\t\t'
-    OvStyle = ET.SubElement(Placemark, 'OvStyle')
-    TrackStyle = ET.SubElement(OvStyle, 'TrackStyle')
-    type = ET.SubElement(TrackStyle, 'type')
-    type.text = '5'
-    width = ET.SubElement(TrackStyle, 'width')
-    width.text = '1'
-
-    
-    files_tingchechang_xiaxing = get_all_files(os.path.join(dir_path, '****线路', '***下行'), '*.kml')
-    Placemark = ET.SubElement(Folder_xianlu, 'Placemark')
-    name = ET.SubElement(Placemark, 'name')
-    name.text = '***下行'
-    Style = ET.SubElement(Placemark, 'Style')
-    LineStyle = ET.SubElement(Style, 'LineStyle')
-    color = ET.SubElement(LineStyle, 'color')
-    color.text = 'ffd18802'
-    width = ET.SubElement(LineStyle, 'width')
-    width.text = '1'
-    MultiGeometry = ET.SubElement(Placemark, 'MultiGeometry')
-
-    for f in files_tingchechang_xiaxing:
-        # line_name = os.path.splitext(os.path.basename(f))[0]
-        data = get_kml_coordinates(f, 'Document/Folder/Placemark/LineString/coordinates')
-        LineString = ET.SubElement(MultiGeometry, 'LineString')
-        coordinates = ET.SubElement(LineString, 'coordinates')
-        coordinates.text = '\n\t\t\t\t\t\t' + data.replace('\n', '\n\t\t\t\t\t\t') + '\n\t\t\t\t\t\t'
-    OvStyle = ET.SubElement(Placemark, 'OvStyle')
-    TrackStyle = ET.SubElement(OvStyle, 'TrackStyle')
-    type = ET.SubElement(TrackStyle, 'type')
-    type.text = '5'
-    width = ET.SubElement(TrackStyle, 'width')
-    width.text = '1'
+            for f in files_xianlu:
+                # line_name = os.path.splitext(os.path.basename(f))[0]
+                data = get_kml_coordinates(f, 'Document/Folder/Placemark/LineString/coordinates')
+                LineString = ET.SubElement(MultiGeometry, 'LineString')
+                coordinates = ET.SubElement(LineString, 'coordinates')
+                coordinates.text = '\n\t\t\t\t\t\t' + data.replace('\n', '\n\t\t\t\t\t\t') + '\n\t\t\t\t\t\t'
+            OvStyle = ET.SubElement(Placemark, 'OvStyle')
+            TrackStyle = ET.SubElement(OvStyle, 'TrackStyle')
+            type = ET.SubElement(TrackStyle, 'type')
+            type.text = '5'
+            width = ET.SubElement(TrackStyle, 'width')
+            width.text = '1'
 
 
     #单位工程位置****************************************************************************************
@@ -203,12 +130,12 @@ def create_kml(dir_path):
 
     datalist = data.split('\n')
 
-    if(len(datalist) == len(*******LIST)):
-        print('**数量：'+ str(len(datalist)))
+    if(len(datalist) == len(******LIST)):
+        print('******数量：'+ str(len(datalist)))
         for i in range(len(datalist)):
             Placemark = ET.SubElement(Folder_danweigongcheng, 'Placemark')
             name = ET.SubElement(Placemark, 'name')
-            name.text = *******LIST[i]
+            name.text = ******LIST[i]
             Style = ET.SubElement(Placemark, 'Style')
             IconStyle = ET.SubElement(Style, 'IconStyle')
             color = ET.SubElement(IconStyle, 'color')
@@ -223,8 +150,7 @@ def create_kml(dir_path):
             coordinates.text = datalist[i]
 
 
-    # tree = ET.ElementTree(root)
-    # tree.write(r'C:\Users\Administrator\Desktop\KML\1号线整理\test.kml', encoding='utf-8')
+
     rawText = ET.tostring(root)
     dom = MN.parseString(rawText)
     with open(os.path.join(dir_path,'testout.kml'), 'w', encoding='utf-8') as f:
@@ -233,4 +159,4 @@ def create_kml(dir_path):
 
 
 if __name__ == '__main__':
-    create_kml(r'C:\Users\Administrator\Desktop\****\原始数据')
+    create_kml(r'C:\Users\Administrator\Desktop\******\原始数据')
